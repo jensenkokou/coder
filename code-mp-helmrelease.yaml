@@ -1,0 +1,27 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: code-marketplace
+  namespace: coder
+spec:
+  interval: 5m
+  timeout: 10m
+  chart:
+    spec:
+      sourceRef:
+        kind: HelmRepository
+        name: coder-helm-repo
+        namespace: flux-system
+      chart: code-marketplace
+      version: 1.1.0  # Ensure this is the correct new version
+  releaseName: code-marketplace
+  values:
+    image:
+      repository: "artifactory.mda.mil/gm-tma-docker-prod-local/custom/code-marketplace"
+      pullPolicy: Always
+      tag: "release"  # Update to the latest version
+    imagePullSecrets:
+      - name: "pull-secret"
+    ingress:
+      enabled: false
+      className: "ng
